@@ -9,11 +9,10 @@ class ContaCorrente(Conta):
 			print("Você precisa quitar o débito de R${:.2f} para encerrar a conta".format(-self.saldo))
 
 		else:
-			confirm = bool(int(input("Deseja mesmo encerrar a conta?")))
-			if confirm:
-				print("Conta encerrada! Sacados R${:.2f}".format(self.saldo))
-				del self
+			super().fechar()
 
+	def set_juros(self, taxa):
+		self.juros = taxa
 
 	def set_limite(self, limite):
 		self.limite = limite

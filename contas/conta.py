@@ -11,7 +11,7 @@ class Conta(ABC):
         self.identificador = identificador
         self.dono = dono
         self.__senha = senha
-        self.__superuser = False
+        self._superuser = False
         self.__saldo = 0
         self.__limite = 0
         self.__juros = 0
@@ -19,7 +19,7 @@ class Conta(ABC):
         self.__operacoes = []
 
     def __str__(self):
-        return "Conta {}".format(self.identificador)
+        return str(self.dono)
 
     @abstractmethod
     def fechar(self):
@@ -35,11 +35,11 @@ class Conta(ABC):
     def get_dono(self):
         return self.dono
 
-    def creditar(self, valor, origem):
+    def creditar(self, valor, origem, data=date.today()):
         if valor > 0:
             self.__saldo += valor
             print("Despositados R${:.2f}".format(valor))
-            self.registrar_operacao("+", valor, origem, date.today())
+            self.registrar_operacao("+", valor, origem, data)
 
         else:
             raise ValueError("Só é possível depositar valores acima de R$0,00")
@@ -57,17 +57,23 @@ class Conta(ABC):
         self.__senha = nova_senha
 
     @auth_required  
-    def debitar(self, valor, origem):
-        if self.__saldo - valor > self.__limite:
-            self.__saldo = self.__saldo - valor
-            print("Sacados R${:.2f}".format(valor))
-            self.registrar_operacao("-", valor, origem, date.today())
+    def debitar(self, valor, origem, data=date.today()):
+        if valor > 0:
+            if self.__saldo - valor >= self.__limite:
+                self.__saldo = self.__saldo - valor
+                print("Sacados R${:.2f}".format(valor))
+                self.registrar_operacao("-", valor, origem, data)
+                return True
+
+            else:
+                raise ValueError("Você não tem limite suficiente")
+
         else:
-            print("Você não tem limite suficiente")
+            raise ValueError("Não é possível sacar valor negativo")
 
     @auth_required
-    def tirar_extrato(self):
-        data_limite = date.today() - timedelta(days=30)
+    def get_extrato(self, dias=30):
+        data_limite = date.today() - timedelta(days=dias)
         operacoes_para_extrato = filter(lambda x: x.data >= data_limite, self.__operacoes)
         operacoes_para_extrato = sorted(operacoes_para_extrato, key=lambda x: (x.data, x.tipo))
         grouped = groupby(operacoes_para_extrato, lambda x: x.data)
@@ -81,14 +87,14 @@ class Conta(ABC):
         return extrato
 
     @auth_required
-    def verificar_saldo(self) -> float:
+    def get_saldo(self) -> float:
         return self.__saldo
 
     def registrar_operacao(self, tipo, valor, origem, data):
         self.__operacoes.append(Operacao(tipo, valor, origem, data))
 
     def is_superuser(self):
-        return self.__superuser
+        return self._superuser
 
     def is_autenticado(self):
         return self.__autenticado

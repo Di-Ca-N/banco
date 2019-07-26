@@ -11,3 +11,5 @@ class Pessoa:
         self.email = email
         self.telefone = telefone
 
+    def __str__(self):
+        return self.nome

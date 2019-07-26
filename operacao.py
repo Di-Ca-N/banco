@@ -6,4 +6,4 @@ class Operacao:
         self.data = data
 
     def __str__(self):
-        return "{} R${:>10.2f}{:>11}".format(self.tipo, self.valor, self.origem)
+        return "{} R${:>10.2f}{:>15}".format(self.tipo, self.valor, self.origem)

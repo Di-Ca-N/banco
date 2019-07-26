@@ -15,7 +15,7 @@ class ContaCorrente(Conta):
         self.juros = taxa
 
     def set_limite(self, limite):
-        self.limite = limite
+        self.limite = -limite
 
     def corrigir(self):
         if self.__saldo < 0:

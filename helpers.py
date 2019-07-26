@@ -8,6 +8,7 @@ def auth_required(function):
         if instance.is_autenticado():
             return function(*args, **kwargs)
         else:
-            print("Autentique-se para fazer essa operação")
+            raise AttributeError("Você precisa estar autenticado para fazer essa operação")
+            # print("Autentique-se para fazer essa operação")
 
     return _function

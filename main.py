@@ -25,10 +25,10 @@ def main():
     conta_gettada.debitar(120, "casas bahia")
     conta_gettada.creditar(130, "José")
     conta_gettada.debitar(120, "Pedro")
-    c = conta_gettada.tirar_extrato()
+    c = conta_gettada.get_extrato()
     print(c)
     print(conta_gettada.is_autenticado())
-    print(conta_gettada.verificar_saldo())
+    print(conta_gettada.get_saldo())
 
 
 if __name__ == '__main__':

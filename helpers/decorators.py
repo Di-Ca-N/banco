@@ -9,6 +9,5 @@ def auth_required(function):
             return function(*args, **kwargs)
         else:
             raise AttributeError("Você precisa estar autenticado para fazer essa operação")
-            # print("Autentique-se para fazer essa operação")
 
     return _function

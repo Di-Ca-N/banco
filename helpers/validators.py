@@ -44,7 +44,7 @@ def validate_date(strdate):
 
 
 def validate_phone(phone):
-    regex = r'\(\d\d\)((\d{9}|\d{8})$'
+    regex = r'\(\d\d\)(\d{9}|\d{8})$'
     if not re.match(regex, phone):
         print("Telefone deve ter o formato (XX)XXXXXXXX ou (XX)XXXXXXXXX")
         return False

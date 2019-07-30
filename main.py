@@ -1,42 +1,29 @@
 from banco import Banco
-from atm import Atm
+from atm import ATM
 from contas import ContaPoupanca, ContaCorrente, ContaAdministrativa
+from helpers.interface import Interface
 
 
 def main():
     banco = Banco("BBF", "12312")
-    conta_corrente = banco.abrir_conta(ContaCorrente, "Jorge", "12345", "123")
-    conta_poupanca = banco.abrir_conta(ContaPoupanca, "José", "12345", "321")
-    conta_gerente = banco.abrir_conta(ContaAdministrativa, "Maercelo", "12345", "777")
-    atm = Atm(banco)
+    banco.abrir_conta(ContaCorrente, "Jorge", "12345", "123", juros=0.1, limite=2000)
+    banco.abrir_conta(ContaPoupanca, "José", "12345", "321")
+    banco.abrir_conta(ContaAdministrativa, "Maercelo", "12345", "777")
+    atm = ATM(banco)
 
-    while True:
-        opcao = input("""
-        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        XX                BANCO DA FAMÍLIA FELIZ                XX
-        XX    Onde você, cliente, é nosso maior patrimônio!     XX
-        XX                                                      XX
-        XX  01. Atendimento Mesas                               XX
-        XX  02. Autoatendimento                                 XX
-        XX  X. Sair                                             XX
-        XX                                                      XX
-        XX                                                      XX
-        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        """)
+    interface = Interface(
+        title="BANCO DA FAMÍLIA FELIZ",
+        message="Seja bem-vinda, potencial fonte de renda!",
+        box_weight=2,
+        bottom_weight=1,
+        bottom_padding=1
+    )
 
-        while opcao not in ["01", "02", "X"]:
-            opcao = input("Digite uma opcao válida")
+    interface.add_menu_option("Atendimento Mesas", banco.iniciar_atendimento)
+    interface.add_menu_option("Autoatendimento", atm.iniciar_atendimento)
 
-        if opcao == "01":
-            banco.iniciar_atendimento()
-
-        elif opcao == "02":
-            atm.iniciar_atendimento()
-
-        else:
-            return
-
+    interface.run()
+    return
 
 if __name__ == '__main__':
     main()

@@ -44,11 +44,12 @@ def validate_date(strdate):
 
 
 def validate_phone(phone):
-    regex = r'\(\d\d\)((\d{5}|\d{4})\-\d{4})$'
+    regex = r'\(\d\d\)((\d{9}|\d{8})$'
     if not re.match(regex, phone):
         print("Telefone deve ter o formato (XX)XXXXXXXX ou (XX)XXXXXXXXX")
         return False
     return True
+
 
 def validate_cep(cep):
     regex = r'\d{5}-\d{3}$'

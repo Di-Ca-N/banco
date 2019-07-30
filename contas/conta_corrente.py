@@ -5,12 +5,25 @@ from helpers.decorators import auth_required
 
 
 class ContaCorrente(Conta):
-    def __init__(self, identificador, dono, senha, criacao=date.today()):
+    """
+    Define conta com comportamento de conta corrente
+    """
+    def __init__(self, identificador, dono, senha, criacao=date.today(), limite=None, juros=None):
+        """
+            Inicializa conta corrente
+        Args:
+            identificador: identificador único
+            dono: objeto Pessoa
+            senha: senha de acesso à conta
+            criacao: data de criação da conta
+            limite: valor mínimo do saldo
+            juros: taxa de juros
+        """
         super().__init__(identificador, dono, senha, criacao)
-        self.ask_limit()
-        self.ask_juros()
+        self.limite = -limite if limite is not None else self._ask_limit()
+        self.juros = juros if juros is not None else self._ask_juros()
 
-    def ask_limit(self):
+    def _ask_limit(self):
         sucess = False
         while not sucess:
             try:
@@ -20,7 +33,7 @@ class ContaCorrente(Conta):
             else:
                 sucess = True
 
-    def ask_juros(self):
+    def _ask_juros(self):
         sucess = False
         while not sucess:
             try:
@@ -32,18 +45,37 @@ class ContaCorrente(Conta):
 
     @auth_required
     def fechar(self):
+        """
+        Implementação do método abstrato fechar da class Conta
+
+        Returns:
+            None
+        """
         if self.get_saldo() < 0:
             print("Você precisa quitar o débito de R${:.2f} para encerrar a conta".format(-self.saldo))
+            return False
 
         else:
-            super().fechar()
-
-    def set_juros(self, taxa):
-        self.juros = taxa
+            return super().fechar()
 
     def set_limite(self, limite):
+        """
+        Define limite para a conta
+
+        Args:
+            limite: novo saldo mínimo para a conta
+
+        Returns:
+            None
+        """
         self.limite = -limite
 
     def corrigir(self):
+        """
+        Implementação do método abstrato corrigir da class Conta
+
+        Returns:
+            None
+        """
         if self.saldo < 0:
             super().corrigir()

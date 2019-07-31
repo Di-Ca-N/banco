@@ -2,19 +2,31 @@ import re
 
 
 def validate_cpf(cpf):
-    regex = r'\d{11}$'
+    """
+    Validates a CPF
+
+    Args:
+        cpf: string to be validated
+
+    Returns:
+        Boolean defining the received string as valid or not
+    """
+    regex = r'\d{11}$'  # Matches sequences of only 11 consecutive digits
     if not re.match(regex, cpf):
         print("Digite apenas os números de seu CPF")
         return False
 
     primeiros, verificadores = cpf[:9], cpf[9:]
 
+    # Algorithm for validate CPF
     for i in [0, 1]:
         multiplicador = 10 + i
         total = 0
+
         for j in range(9 + i):
             total += int(primeiros[j]) * multiplicador
             multiplicador -= 1
+
         digito = total * 10 % 11
 
         if digito != int(verificadores[i]):
@@ -40,6 +52,18 @@ def validate_date(strdate):
     if not re.match(regex, strdate):
         print("A data deve estar no formato dd/mm/aaaa")
         return False
+
+    day, month, year = map(int, strdate.split("/"))
+
+    general_invalid_day = day > 31
+    general_invalid_month = month > 12
+    invalid_general_february_day = day > 29 and month == 2
+    invalid_february_day_not_leap = day > 28 and month == 2 and year % 4 != 0
+
+    if general_invalid_day or general_invalid_month or invalid_general_february_day or invalid_february_day_not_leap:
+        print("Data inválida")
+        return False
+
     return True
 
 

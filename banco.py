@@ -141,11 +141,12 @@ class Banco:
             message="Escolha o tipo de conta",
             box_weight=2,
             bottom_weight=1,
-            bottom_padding=1
+            bottom_padding=1,
+            return_selected_option=True,
         )
-        interface.add_menu_option("Conta Corrente", ContaCorrente, return_value=True)
-        interface.add_menu_option("Conta Poupanca", ContaPoupanca, return_value=True)
-        interface.add_menu_option("Conta Administrativa", ContaAdministrativa, return_value=True)
+        interface.add_menu_option("Conta Corrente", ContaCorrente)
+        interface.add_menu_option("Conta Poupanca", ContaPoupanca)
+        interface.add_menu_option("Conta Administrativa", ContaAdministrativa)
 
         tipo_selecionado = interface.run()
 
